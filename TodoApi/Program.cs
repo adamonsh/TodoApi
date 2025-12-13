@@ -8,6 +8,20 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// Sanity check:
+app.MapGet("/", () => "Todo API is running");
+
+/* Test: */
+var todos = new List<Todo>
+{
+    new Todo { Id = 1, Title = "Learn .NET Minimal APIs", IsComplete = false },
+    new Todo { Id = 2, Title = "Build a small portfolio project", IsComplete = false }
+};
+
+/*
+ * Endpoints will go here in later issues.
+ */
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
