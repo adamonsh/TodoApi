@@ -18,11 +18,7 @@ var todos = new List<Todo>
     new Todo { Id = 2, Title = "Build a small portfolio project", IsComplete = false }
 };
 
-app.MapGet("/todos", () =>
-{
-    return Results.Ok(todos);
-});
-
+app.MapGet("/todos", () => Results.Ok(todos));
 app.MapGet("/todos/{id:int}", (int id) =>
 {
     var todo = todos.FirstOrDefault(t => t.Id == id);
