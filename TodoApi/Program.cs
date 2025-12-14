@@ -29,6 +29,21 @@ app.MapGet("/todos/{id:int}", (int id) =>
     return todo is null ? Results.NotFound() : Results.Ok(todo);
 });
 
+app.MapPost("/todos", (Todo newTodo) =>
+{
+    if (string.IsNullOrWhiteSpace(newTodo.Title))
+        return Results.BadRequest("Title is required.");
+
+    // Generate a new ID
+    var newId = todos.Count == 0 ? 1 : todos.Max(t => t.Id) + 1;
+    newTodo.Id = newId;
+
+    todos.Add(newTodo);
+
+    return Results.Created($"/todos/{newTodo.Id}", newTodo);
+});
+
+
 
 /*
  * Endpoints will go here in later issues.
