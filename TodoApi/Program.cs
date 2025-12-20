@@ -18,16 +18,27 @@ var todos = new List<Todo>
     new Todo { Id = 2, Title = "Build a small portfolio project", IsComplete = false }
 };
 
-app.MapGet("/todos", () =>
-{
-    return Results.Ok(todos);
-});
-
+app.MapGet("/todos", () => Results.Ok(todos));
 app.MapGet("/todos/{id:int}", (int id) =>
 {
     var todo = todos.FirstOrDefault(t => t.Id == id);
     return todo is null ? Results.NotFound() : Results.Ok(todo);
 });
+
+app.MapPost("/todos", (Todo newTodo) =>
+{
+    if (string.IsNullOrWhiteSpace(newTodo.Title))
+        return Results.BadRequest("Title is required.");
+
+    // Generate a new ID
+    var newId = todos.Count == 0 ? 1 : todos.Max(t => t.Id) + 1;
+    newTodo.Id = newId;
+
+    todos.Add(newTodo);
+
+    return Results.Created($"/todos/{newTodo.Id}", newTodo);
+});
+
 
 
 /*
