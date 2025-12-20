@@ -1,4 +1,6 @@
+using System.Linq;
 using TodoApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,18 @@ app.MapPost("/todos", (Todo newTodo) =>
     todos.Add(newTodo);
 
     return Results.Created($"/todos/{newTodo.Id}", newTodo);
+});
+
+app.MapDelete("/todos/{id:int}", (int id) =>
+{
+    var todo = todos.FirstOrDefault(t => t.Id == id);
+    if (todo is null)
+    {
+        return Results.NotFound();
+    }
+
+    todos.Remove(todo);
+    return Results.NoContent();
 });
 
 
